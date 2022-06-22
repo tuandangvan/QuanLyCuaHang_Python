@@ -1,0 +1,526 @@
+WindowManager:
+    FormLogin:
+    FormSignup:
+    FormMain:
+    Cart:
+    QLMatHang:
+    FormChangePassword:
+<FormMain>:
+    name:"main"
+    BoxLayout:
+        orientation: "vertical"
+        MDBottomNavigation:
+            MDBottomNavigationItem:
+                id:item
+                name:'order'
+                text:"Đặt hàng"
+                icon:"cart-plus"        
+                BoxLayout:
+                    orientation: "vertical"
+                    MDBoxLayout:
+                        padding: '2dp'
+                        adaptive_height: True
+                        spacing: 10
+                        pos_hint: {"center_y": 1}
+                        MDToolbar:
+                            title: "Đặt hàng"
+                            pos_hint: {'top': 1}
+                            elevation: 10
+                            md_bg_color: (255/255,153/255,153/255,1)
+                            left_action_items: [['image\menu.png', lambda x: nav_drawer.set_state("open")]]
+                            right_action_items: [['basket-plus', lambda x: app.set_screen("cart","left")],['plus-circle-outline', lambda x: app.check_user()]]  #Phần Đặt hàng
+                    MDBoxLayout:
+                        padding: '2dp'
+                        adaptive_height: True
+                        spacing: 10
+                        pos_hint: {"center_y": 1}    
+                        MDTextFieldRound:
+                            id: txtSearch
+                            hint_text: "Nhập tên sản phẩm"
+                            size_hint: 0.5, 0.5
+                            pos_hint: {"center_x": .5, "center_y": 0.5}
+                            normal_color: 1, 1, 1, 1
+                            color_active: 1, 1, 1, 1
+                            multiline: False
+                            font_size: "18sp"
+                        MDIconButton:
+                            icon: 'magnify'         #Phần tìm kiếm
+                            on_release: root.ShowSearchItem()
+                        MDIconButton:
+                            icon: 'reload'         #Phần tìm kiếm
+                            on_release: root.ShowShopping()
+                    MDBoxLayout:
+                        id: boxShop
+                        text: root.ShowShopping()   #Show dữ liệu
+
+                        
+            MDBottomNavigationItem:
+                id: bill
+                name:"hoadon"
+                text: "Hóa Đơn"
+                icon: "file-document-outline"   #Screen hóa đơn 
+                on_tab_release:
+                    root.ShowHoaDon()
+                BoxLayout:
+                    orientation: "vertical"
+                    MDBoxLayout:
+                        padding: '2dp'
+                        adaptive_height: True
+                        spacing: 10
+                        pos_hint: {"center_y": 1}
+                        MDToolbar:
+                            title: "Hóa đơn"
+                            pos_hint: {'top': 1}
+                            elevation: 10
+                            md_bg_color: (255/255,153/255,153/255,1)
+                            left_action_items: [['image\menu.png', lambda x: nav_drawer.set_state("open")]]
+                    BoxLayout:
+                        id: boxHD
+                        text: root.ShowHoaDon()    
+            MDBottomNavigationItem:
+                id: Sales
+                name:"doanhthu"
+                text: "Doanh thu"
+                icon: "point-of-sale"   #Screen hóa đơn 
+                on_tab_release:
+                    root.ShowDoanhThu()
+                BoxLayout:
+                    orientation: "vertical"
+                    MDBoxLayout:
+                        padding: '3dp'
+                        adaptive_height: True
+                        spacing: 10
+                        pos_hint: {"center_y": 1}
+                        MDIconButton:
+                            icon: 'image\menu.png'
+                            on_release: 
+                                nav_drawer.set_state()
+                        MDTextFieldRound:
+                            id: txtgroud
+                            hint_text: "Nhập ngày cần tìm kiếm"
+                            size_hint: 0.5, 0.5
+                            pos_hint: {"center_x": .5, "center_y": 0.5}
+                            normal_color: 1, 1, 1, 1
+                            color_active: 1, 1, 1, 1
+                            multiline: False
+                            font_size: "15sp" 
+                        MDIconButton:
+                            icon: 'magnify'
+                            on_release: 
+                                root.ShowSearchNgay()
+                        MDRectangleFlatIconButton:
+                            icon:'chart-line'  
+                            text: "Biểu đồ doanh thu"
+                            theme_text_color: "Custom"
+                            text_color: "#0d0d0d"
+                            line_color: "#a6a6a6"
+                            theme_icon_color: "Custom"
+                            icon_color: "#0277db"
+                            on_release:
+                                root.Sale_Chart()
+                    MDBoxLayout:
+                        id: boxSales
+                        text: root.ShowDoanhThu()
+ 
+             
+    MDNavigationDrawer:
+        id: nav_drawer
+        
+        ContentNavigationDrawer:
+            orientation: 'vertical'
+            padding: "8dp"
+            spacing: "8dp"
+            Image:
+                size_hint: (0.5,0.5)
+                source: "image\icons8-manatee-96.png"
+            MDLabel:
+                text: "Store Management"
+                font_style: "Subtitle1"
+                size_hint_y: None
+                height: self.texture_size[1]
+            MDLabel:
+                text: "Group 11"
+                size_hint_y: None
+                font_style: "Caption"
+                height: self.texture_size[1]
+            ScrollView:
+                DrawerList:
+                    id: md_list
+                    
+                    MDList:
+                        OneLineIconListItem:
+                            text: "Đặt hàng"
+                            on_release: 
+                                item.on_tab_press()
+                                item.header.on_press()
+                                nav_drawer.set_state(new_state="close")
+                            IconLeftWidget:
+                                icon: "image\shopping-cart.png"
+
+                        OneLineIconListItem:
+                            text: "Hóa Đơn"
+                            on_release: 
+                                bill.on_tab_press()
+                                bill.header.on_press()
+                                nav_drawer.set_state(new_state="close")
+                                root.ShowHoaDon()
+                            IconLeftWidget:
+                                icon: "image\order.png"
+                        
+                        OneLineIconListItem:
+                            text: "Doanh thu"
+                            on_release: 
+                                Sales.on_tab_press()
+                                Sales.header.on_press()
+                                nav_drawer.set_state(new_state="close")
+                                root.ShowDoanhThu()
+                            IconLeftWidget:
+                                icon: "image\icons8-total-sales-48.png"
+
+                        OneLineIconListItem:
+                            text: "Tạo tài khoản"
+                            on_release: 
+                                root.check_admin()
+                                nav_drawer.set_state(new_state="close")
+                            IconLeftWidget:
+                                icon: "image\sign.png"  
+                        OneLineIconListItem:               
+                            text: "Đổi mật khẩu"
+                            on_release: 
+                                app.root.current = "change_password"
+                                root.manager.transition.direction = "left"
+                                nav_drawer.set_state(new_state="close")
+                            IconLeftWidget:
+                                icon: "image\change_password.png"                                  
+                        
+                        OneLineIconListItem:
+                            text: "Đăng xuất"
+                            on_release: 
+                                app.root.current = "login"
+                                root.manager.transition.direction = "left"
+                                nav_drawer.set_state(new_state="close")
+                            IconLeftWidget:
+                                icon: "image\logout.png"  
+                              
+<Cart>:
+    name: "cart"
+    Screen:
+        BoxLayout:
+            orientation: "vertical"
+            MDBoxLayout:
+                padding: '2dp'
+                adaptive_height: True
+                spacing: 10
+                pos_hint: {"center_y": 1}
+                MDToolbar:
+                    title: "Giỏ hàng"
+                    elevation: 10
+                    pos_hint: {'top': 1}
+                    md_bg_color: (255/255,153/255,153/255,1)
+                    left_action_items: [['image\icons8-sort-left-48.png', lambda x: app.set_screen("main","right")]]
+            MDBoxLayout:
+                id: boxCart
+                size_hint_y: '10dp'
+                text: root.ResetCart()   
+            MDBoxLayout:
+                id: payCart                
+            MDBoxLayout:
+                padding: '5dp'
+                MDRectangleFlatButton:
+                    text: "Refesh"
+                    line_color: "#d048df"
+                    font_size: "18sp"
+                    md_bg_color: 1, 0, 1, 1
+                    on_release: 
+                        root.ListCart()
+                        root.Pay()
+                MDRectangleFlatButton:
+                    text: "Update"
+                    line_color: "#d048df"   
+                    font_size: "18sp"             
+                    on_release: root.UpdateBtn()
+                MDRectangleFlatButton:
+                    text: "Thanh Toán"
+                    line_color: "#d048df"
+                    font_size: "18sp"
+                    on_release:                        
+                        root.add_HoaDon()
+                        root.tong_DoanhSo()
+                        root.ResetCart()
+                        root.ListCart()
+                        root.Pay()
+                        
+                MDBoxLayout:
+                    id: boxPay           
+
+<QLMatHang>:
+    name: 'scrn_product_content'
+    Screen:
+        id: scrn_product_content
+        BoxLayout:
+            orientation: 'vertical'
+            MDBoxLayout:
+                id: scrn_product_contents
+                padding: '2dp'
+                adaptive_height: True
+                spacing: 10
+                pos_hint: {"center_y": 1}
+                MDToolbar:
+                    title: "Quản lí mặt hàng"
+                    elevation: 10
+                    pos_hint: {'top': 1}
+                    md_bg_color: (255/255,153/255,153/255,1)
+                    left_action_items: [['image\icons8-sort-left-48.png', lambda x: app.set_screen("main","right")]]
+            BoxLayout:
+                id:boxQL
+                text: root.ShowQL() 
+            BoxLayout:
+                id: ops_fields_p
+                spacing: 10
+                size_hint_y: None
+                height: 35
+            BoxLayout:
+                id: ops_btns_p
+                spacing: 10
+                size_hint_y: None
+                height: 45
+                Button:
+                    id: crud_add_p
+                    text: 'Thêm sản phẩm'
+                    on_release: root.add_product_fields()
+                Button:
+                    id: crud_update_p
+                    text: 'Cập nhật sản phẩm'
+                    on_release: root.update_product_fields()
+                Button:
+                    id: crud_remove_p
+                    text: 'Xóa sản phẩm'
+                    on_release: root.remove_product_fields()
+
+
+<FormLogin>:
+    name: "login"
+    MDFloatLayout:
+        md_bg_color: 1, 1, 1, 1
+        Image:  
+            source: "image\logo.jpg"
+            size_hint: 0.5, 0.5
+            pos_hint: {"x": 0.25, "y" : .45 }
+
+        MDFloatLayout:
+            size_hint: .85, .08
+            pos_hint: {"center_x": .5, "center_y": .33}
+            MDTextFieldRound:
+                id: login_user
+                hint_text: "Tên đăng nhập"
+                icon_left: "account"
+                size_hint: 0.87, 0.9
+                pos_hint: {"center_x": .5, "center_y": .5}
+                normal_color: 238/255, 238/255, 238/255, 1
+                color_active: 238/255, 238/255, 238/255, 1
+                multiline: False
+                foreground_color: 96/255, 74/255, 215/255, 1
+                background_color: 0, 0, 0, 0
+                padding: 15
+                font_size: "18sp"
+        MDFloatLayout:
+            size_hint: .85, .08
+            pos_hint: {"center_x": .5, "center_y": .23}
+            MDTextFieldRound:
+                id: login_password
+                hint_text: "Mật khẩu"
+                icon_left: "lock"
+                password: True
+                size_hint: 0.87, 0.9
+                pos_hint: {"center_x": .5, "center_y": .5}
+                normal_color: 238/255, 238/255, 238/255, 1
+                color_active: 238/255, 238/255, 238/255, 1
+                multiline: False
+                foreground_color: 96/255, 74/255, 215/255, 1
+                background_color: 0, 0, 0, 0
+                padding: 15
+                font_size: "18sp"
+        Button:
+            text: "Đăng Nhập"
+            font_size: "20sp"
+            size_hint: .5, .08
+            theme_text_color: "Custom"
+            pos_hint: {"center_x": .5, "center_y": .12}
+            background_color: 0, 0, 0, 0
+            canvas.before:
+                Color:
+                    rgb: 246/255, 135/255, 177/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [23]
+            on_release: root.check_data_login()
+        MDTextButton:
+            text: "Chưa có tài khoản? [color=#f687b1] Tạo tài khoản[/color]"
+            markup: True
+            theme_text_color: "Custom"
+            pos_hint: {"center_x": .5, "center_y": .05}
+            on_release: 
+                root.signup()
+        
+        
+   
+        
+<FormSignUp>:
+    name: "signup"
+
+    MDFloatLayout:
+        id: formsignup
+        md_bg_color: 1, 1, 1, 1
+        Image:  
+            source: "image\logoSign.png"
+            size_hint: 0.5, 0.5
+            pos_hint: {"x": 0.25, "y" : .5 }
+
+        MDFloatLayout:
+            size_hint: .85, .08
+            pos_hint: {"center_x": .5, "center_y": .42}
+            MDTextFieldRound:
+                id: signup_user
+                hint_text: "Tài khoản"
+                icon_left: "account"
+                size_hint: 0.87, 0.9
+                pos_hint: {"center_x": .5, "center_y": .5}
+                normal_color: 238/255, 238/255, 238/255, 1
+                color_active: 238/255, 238/255, 238/255, 1
+                multiline: False
+                foreground_color: 96/255, 74/255, 215/255, 1
+                background_color: 0, 0, 0, 0
+                padding: 15
+                font_size: "18sp"
+        MDFloatLayout:
+            size_hint: .85, .08
+            pos_hint: {"center_x": .5, "center_y": .32}
+            MDTextFieldRound:
+                id: signup_password
+                hint_text: "Mật khẩu"
+                icon_left: "lock"
+                password: True
+                size_hint: 0.87, 0.9
+                pos_hint: {"center_x": .5, "center_y": .5}
+                normal_color: 238/255, 238/255, 238/255, 1
+                color_active: 238/255, 238/255, 238/255, 1
+                multiline: False
+                foreground_color: 96/255, 74/255, 215/255, 1
+                background_color: 0, 0, 0, 0
+                padding: 15
+                font_size: "18sp"
+        MDFloatLayout:
+            size_hint: .85, .08
+            pos_hint: {"center_x": .5, "center_y": .22}
+            MDTextFieldRound:
+                id: signup_confirmpassword
+                hint_text: "Nhập lại mật khẩu"
+                icon_left: "lock"
+                password: True
+                size_hint: 0.87, 0.9
+                pos_hint: {"center_x": .5, "center_y": .5}
+                normal_color: 238/255, 238/255, 238/255, 1
+                color_active: 238/255, 238/255, 238/255, 1
+                multiline: False
+                foreground_color: 96/255, 74/255, 215/255, 1
+                background_color: 0, 0, 0, 0
+                padding: 15
+                font_size: "18sp"
+        
+        Button:
+            text: "Tạo Tài Khoản"
+            font_size: "20sp"
+            size_hint: .5, .08
+            theme_text_color: "Custom"
+            pos_hint: {"center_x": .5, "center_y": .12}
+            background_color: 0, 0, 0, 0
+            canvas.before:
+                Color:
+                    rgb: 246/255, 135/255, 177/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [23]
+            on_release: 
+                root.signup_acc()
+        MDTextButton:
+            text: "[color=#f687b1] Trở lại [/color]"
+            markup: True
+            theme_text_color: "Custom"
+            pos_hint: {"center_x": .5, "center_y": .05}
+            on_release: 
+                app.root.current = "main"
+                root.manager.transition.direction = "right"
+
+<FormChangePassword>:
+    name: "change_password"
+    MDFloatLayout:
+        id: formchangepassword
+        md_bg_color: 1, 1, 1, 1
+        Image:  
+            source: "image\logoSign.png"
+            size_hint: 0.4, 0.4
+            pos_hint: {"x": 0.3, "y" : .6 }
+
+        MDFloatLayout:
+            size_hint: .85, .08
+            pos_hint: {"center_x": .5, "center_y": .32}
+            MDTextFieldRound:
+                id: change_password
+                hint_text: "Mật khẩu mới"
+                icon_left: "lock"
+                password: True
+                size_hint: 0.87, 0.9
+                pos_hint: {"center_x": .5, "center_y": .5}
+                normal_color: 238/255, 238/255, 238/255, 1
+                color_active: 238/255, 238/255, 238/255, 1
+                multiline: False
+                foreground_color: 96/255, 74/255, 215/255, 1
+                background_color: 0, 0, 0, 0
+                padding: 15
+                font_size: "18sp"
+        MDFloatLayout:
+            size_hint: .85, .08
+            pos_hint: {"center_x": .5, "center_y": .22}
+            MDTextFieldRound:
+                id: change_confirmpassword
+                hint_text: "Nhập lại mật khẩu"
+                icon_left: "lock"
+                password: True
+                size_hint: 0.87, 0.9
+                pos_hint: {"center_x": .5, "center_y": .5}
+                normal_color: 238/255, 238/255, 238/255, 1
+                color_active: 238/255, 238/255, 238/255, 1
+                multiline: False
+                foreground_color: 96/255, 74/255, 215/255, 1
+                background_color: 0, 0, 0, 0
+                padding: 15
+                font_size: "18sp"
+        Button:
+            text: "Thay đổi mật khẩu"
+            font_size: "20sp"
+            size_hint: .5, .08
+            theme_text_color: "Custom"
+            pos_hint: {"center_x": .5, "center_y": .12}
+            background_color: 0, 0, 0, 0
+            canvas.before:
+                Color:
+                    rgb: 246/255, 135/255, 177/255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [23]
+            on_release: 
+                root.change_acc()
+        MDTextButton:
+            text: "Không thay đổi mật khẩu?[color=#f687b1] Trở lại[/color]"
+            markup: True
+            theme_text_color: "Custom"
+            pos_hint: {"center_x": .5, "center_y": .05}
+            on_release: 
+                app.root.current = "main"
+                root.manager.transition.direction = "right"
+
+            
+        
